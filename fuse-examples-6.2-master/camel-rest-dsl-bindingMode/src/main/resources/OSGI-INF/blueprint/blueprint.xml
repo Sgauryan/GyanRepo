@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+    <bean class="com.mycompany.test.profile.LogTransaction" id="logTransaction"/>
+    <camelContext id="test_rest_dsl" xmlns="http://camel.apache.org/schema/blueprint">
+        <restConfiguration bindingMode="auto" component="jetty"
+            port="9091" scheme="http"/>
+        <rest path="/cbr-web-services/rest/itineraries/">
+
+            <post type="com.mycompany.test.profile.Person">
+                <description>Post request</description>
+                <to uri="direct:processRequest"/>
+            </post>
+        </rest>
+        <route id="_route1">
+            <from id="_from1" uri="direct:processRequest"/>
+            <to id="_to1" uri="bean:logTransaction"/>
+        </route>
+    </camelContext>
+</blueprint>
